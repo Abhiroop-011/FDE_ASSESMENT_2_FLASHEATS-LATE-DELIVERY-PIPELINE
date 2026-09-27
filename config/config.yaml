@@ -1,0 +1,83 @@
+# FlashEats late-delivery KPI pipeline — configuration.
+# Everything that changes between environments or stakeholder decisions lives here, not in code.
+# Secrets / environment-specific endpoints are read from .env (see .env.example) and override these values.
+
+run:
+  # KPI window: orders created in [run_date - window_days, run_date).
+  # A daily 06:00 run with a trailing 28-day window is the agreed Ops review cadence.
+  window_days: 28
+  # Freshness SLA: the newest order in the window must be at most this many days before run_date.
+  max_data_age_days: 2
+
+paths:
+  database: source_data/database/flasheats.db
+  files_dir: source_data/files
+  bronze_dir: data/bronze
+  silver_dir: data/silver
+  gold_dir: data/gold
+  failed_dir: data/failed
+  log_dir: logs
+
+dispatch_api:
+  url: http://127.0.0.1:8000
+  page_size: 200
+  max_retries: 4
+  retry_base_seconds: 1.0
+  timeout_seconds: 5
+  # Start the local mock Dispatch API as a subprocess for each run (fresh process = deterministic failures).
+  start_mock_api: true
+  # The order DB is the anchor source; dispatch is enrichment. If dispatch is unreachable,
+  # degrade (null dispatch columns + WARN) instead of failing the whole run.
+  required: false
+
+# The judgement call: four stakeholders define "late" differently (source_data/files/client_metric_definitions.json).
+# Canonical definition below; every alternative is still reported in late_definition_sensitivity.csv.
+late_definition:
+  canonical: fde_agreed
+  definitions:
+    fde_agreed:
+      label: "Delivered after promised ETA (> 0 min); denominator = delivered orders with a recorded delivery time"
+      threshold_min: 0
+      denominator: measurable_delivered
+    vp_operations:
+      label: "Any delivered order after promised ETA; all delivered orders in denominator"
+      threshold_min: 0
+      denominator: all_delivered
+    support_lead:
+      label: "Only > 10 min beyond ETA counts"
+      threshold_min: 10
+      denominator: measurable_delivered
+    finance_naive_all_orders:
+      label: "Counterfactual: cancelled orders NOT excluded (what Finance warned against)"
+      threshold_min: 0
+      denominator: all_orders
+    data_team_dashboard:
+      label: "Historical dashboard: delivered orders with non-null actual delivery time"
+      threshold_min: 0
+      denominator: measurable_delivered
+
+metrics:
+  # Leading indicator: assigned -> pickup longer than this is a "pickup-wait breach".
+  # 25 min sits between the on-time median (~17 min) and late median (~29 min); an Ops-agreed trigger, not a model.
+  pickup_wait_breach_min: 25
+
+validation:
+  # Severity: ERROR stops the run before anything is published; WARN is published with the report; INFO is noted.
+  required_columns:
+    orders: [order_id, customer_id, restaurant_id, driver_id, created_at, promised_eta, pickup_at, actual_delivery_at, final_status]
+    dispatch: [order_id, driver_id, original_driver_id, assigned_at, reassigned_at, current_delivery_eta, dispatch_status]
+    interventions: [intervention_id, order_id, intervention_type, intervention_at]
+    support_tickets: [ticket_id, order_id, created_at, category]
+    driver_events: [driver_id, order_id, type, timestamp]
+  allowed_values:
+    final_status: [delivered, cancelled]
+    traffic_bucket: [low, medium, high, severe]
+    weather_bucket: [clear, rain, heavy_rain]
+    dispatch_status: [completed, cancelled]
+  distance_km_range: [0.1, 50]
+  # Minimum share of child rows whose order_id exists in orders; below this is an ERROR (joins would be meaningless).
+  min_fk_coverage: 0.95
+  # Driver app vs order platform pickup timestamps may differ by up to this many seconds before we flag it.
+  pickup_tolerance_seconds: 60
+  # Max allowed share of delivered orders without a delivery timestamp before the KPI is unsafe to publish.
+  max_unmeasurable_share: 0.05

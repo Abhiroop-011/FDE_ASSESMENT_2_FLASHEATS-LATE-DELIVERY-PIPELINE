@@ -1,0 +1,62 @@
+[
+  {
+    "rule": "C01 dedupe to one row per order",
+    "dataset": "orders",
+    "rows_affected": 3,
+    "note": "keep first occurrence"
+  },
+  {
+    "rule": "C02 normalise category case/space",
+    "dataset": "orders.final_status",
+    "rows_affected": 5,
+    "note": ""
+  },
+  {
+    "rule": "C02 normalise category case/space",
+    "dataset": "orders.traffic_bucket",
+    "rows_affected": 3,
+    "note": ""
+  },
+  {
+    "rule": "C02 normalise category case/space",
+    "dataset": "orders.weather_bucket",
+    "rows_affected": 0,
+    "note": ""
+  },
+  {
+    "rule": "C03 drop exact duplicate rows",
+    "dataset": "support_tickets",
+    "rows_affected": 1,
+    "note": ""
+  },
+  {
+    "rule": "C02 normalise category case/space",
+    "dataset": "support_tickets.category",
+    "rows_affected": 3,
+    "note": "'Late Delivery'->late_delivery, 'ETA issue'->eta_changed"
+  },
+  {
+    "rule": "C03 drop exact duplicate rows",
+    "dataset": "restaurant_status",
+    "rows_affected": 2,
+    "note": ""
+  },
+  {
+    "rule": "C02 normalise category case/space",
+    "dataset": "restaurant_status.status",
+    "rows_affected": 4,
+    "note": "'handoff'->handed_off; 'unknown' kept as unknown"
+  },
+  {
+    "rule": "C04 parse timestamps (format='mixed')",
+    "dataset": "all",
+    "rows_affected": 0,
+    "note": "seconds + microsecond precision mixed in sources"
+  },
+  {
+    "rule": "C05 exclude rows that cannot link to an order",
+    "dataset": "support_tickets",
+    "rows_affected": 3,
+    "note": "counted in validation X02/X03"
+  }
+]

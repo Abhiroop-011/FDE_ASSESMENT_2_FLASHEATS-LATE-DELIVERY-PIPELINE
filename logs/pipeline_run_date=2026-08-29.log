@@ -1,0 +1,580 @@
+2026-09-27 20:28:45 | INFO    | RUN       | ===== Pipeline start | run_date=2026-08-29 window=2026-08-01..2026-08-29 simulate=none =====
+2026-09-27 20:28:45 | INFO    | EXTRACT   | Mock Dispatch API healthy | url=http://127.0.0.1:56099 records=1600
+2026-09-27 20:28:45 | INFO    | EXTRACT   | SQL orders       rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | SQL order_keys   rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | SQL customers    rows=900 COUNT(*)=900 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | SQL drivers      rows=120 COUNT(*)=120 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | SQL restaurants  rows=60 COUNT(*)=60 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | CSV interventions rows=430 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | CSV support_tickets rows=202 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | CSV restaurant_status rows=502 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | CSV app_actions  rows=2365 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | CSV order_events rows=4955 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | CSV order_outcomes rows=1600 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | JSON driver_events drivers=120 events=10035 complete=True
+2026-09-27 20:28:45 | INFO    | EXTRACT   | Dispatch API page=1 rows=200 cumulative=200/1600
+2026-09-27 20:28:45 | INFO    | EXTRACT   | Dispatch API page=2 rows=200 cumulative=400/1600
+2026-09-27 20:28:45 | WARNING | EXTRACT   | Dispatch API retryable failure | page=3 status=500 attempt=1/4 wait=1s
+2026-09-27 20:28:46 | INFO    | EXTRACT   | Dispatch API page=3 rows=200 cumulative=600/1600
+2026-09-27 20:28:46 | INFO    | EXTRACT   | Dispatch API page=4 rows=200 cumulative=800/1600
+2026-09-27 20:28:46 | WARNING | EXTRACT   | Dispatch API retryable failure | page=5 status=429 attempt=1/4 wait=1s
+2026-09-27 20:28:47 | INFO    | EXTRACT   | Dispatch API page=5 rows=200 cumulative=1000/1600
+2026-09-27 20:28:47 | INFO    | EXTRACT   | Dispatch API page=6 rows=200 cumulative=1200/1600
+2026-09-27 20:28:47 | INFO    | EXTRACT   | Dispatch API page=7 rows=200 cumulative=1400/1600
+2026-09-27 20:28:47 | INFO    | EXTRACT   | Dispatch API page=8 rows=200 cumulative=1600/1600
+2026-09-27 20:28:47 | INFO    | EXTRACT   | API  dispatch     pages=8 rows=1600 total_records=1600 complete=True
+2026-09-27 20:28:47 | INFO    | EXTRACT   | Mock Dispatch API stopped
+2026-09-27 20:28:47 | INFO    | EXTRACT   | Published data/bronze/run_date=2026-08-29 (21 files)
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S01 orders has all required columns | affected=0 9 required columns present
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S01 dispatch has all required columns | affected=0 7 required columns present
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S01 interventions has all required columns | affected=0 4 required columns present
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S01 support_tickets has all required columns | affected=0 4 required columns present
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S01 driver_events has all required columns | affected=0 4 required columns present
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S02 KPI window contains orders | affected=0 window orders=1603; latest order in DB=2026-08-28 23:33:00
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S03 Freshness: newest order <= 2 days before run_date | affected=0 newest order=2026-08-28 23:33:00; age_days=1
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  S04 order_id is unique (grain = one row per order) | affected=3 duplicate extra rows=3; columns that disagree between copies=['traffic_bucket']
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S05 final_status in ['cancelled', 'delivered'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:28:47 | INFO    | VALIDATE  | INFO  S06 final_status uses canonical spelling | affected=5 variants={'Delivered': 5}
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S05 traffic_bucket in ['high', 'low', 'medium', 'severe'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:28:47 | INFO    | VALIDATE  | INFO  S06 traffic_bucket uses canonical spelling | affected=3 variants={'HIGH': 3}
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S05 weather_bucket in ['clear', 'heavy_rain', 'rain'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S06 weather_bucket uses canonical spelling | affected=0 variants={}
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  S07 distance_km_estimate within [0.1, 50] km | affected=0 min=0.5 max=45.0
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  S08 orders.driver_id is populated | affected=3 null driver_id=3
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  S08 orders.restaurant_id is populated | affected=3 null restaurant_id=3
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  L01 created_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  L01 promised_eta parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  L01 pickup_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  L02 Delivered orders have actual_delivery_at | affected=37 37 of 1535 delivered (2.4%); limit 5%
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  L03 Delivery happens after pickup | affected=5 
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  L04 Promised ETA is after order creation | affected=4 
+2026-09-27 20:28:47 | INFO    | VALIDATE  | INFO  L05 Cancelled orders have no pickup timestamp | affected=68 pickup_at is populated for cancelled orders, so it is not evidence of a pickup
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  L06 Pickup happens after dispatch assignment | affected=14 order platform pickup_at vs dispatch assigned_at
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X01 orders.restaurant_id exists in restaurants table | affected=0 coverage=100.0%
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X01 orders.driver_id exists in drivers table | affected=0 coverage=100.0%
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X01 orders.customer_id exists in customers table | affected=0 coverage=100.0%
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X02 interventions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X02 support_tickets.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  X03 support_tickets.order_id is populated | affected=3 rows without order_id=3
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X02 restaurant_status.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X02 app_actions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X02 driver_events.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X02 order_outcomes.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X02 dispatch.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  X04 support_tickets has no duplicate ticket_id | affected=1 
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  X04 restaurant_status has no duplicate rows | affected=2 
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X04 interventions has no duplicate intervention_id | affected=0 
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X05 Dispatch and order DB agree on cancellation | affected=0 
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  X06 Driver app and order DB agree on delivery time (where both exist) | affected=0 compared=1498
+2026-09-27 20:28:47 | INFO    | VALIDATE  | INFO  X07 Unmeasurable deliveries have no alternative evidence | affected=37 driver app has a delivered event for these orders
+2026-09-27 20:28:47 | WARNING | VALIDATE  | WARN  X08 Driver app and order DB pickup times agree within 60s | affected=5 max diff=3678s
+2026-09-27 20:28:47 | INFO    | VALIDATE  | INFO  X09 Intervention log and order-event stream describe the same interventions | affected=540 order_interventions.csv orders=430; order_events intervention orders=260; overlap=75
+2026-09-27 20:28:47 | INFO    | CLEAN     | C01 dedupe to one row per order        orders             rows_affected=3 keep first occurrence
+2026-09-27 20:28:47 | INFO    | CLEAN     | C02 normalise category case/space      orders.final_status rows_affected=5 
+2026-09-27 20:28:47 | INFO    | CLEAN     | C02 normalise category case/space      orders.traffic_bucket rows_affected=3 
+2026-09-27 20:28:47 | INFO    | CLEAN     | C02 normalise category case/space      orders.weather_bucket rows_affected=0 
+2026-09-27 20:28:47 | INFO    | CLEAN     | C03 drop exact duplicate rows          support_tickets    rows_affected=1 
+2026-09-27 20:28:47 | INFO    | CLEAN     | C02 normalise category case/space      support_tickets.category rows_affected=3 'Late Delivery'->late_delivery, 'ETA issue'->eta_changed
+2026-09-27 20:28:47 | INFO    | CLEAN     | C03 drop exact duplicate rows          restaurant_status  rows_affected=2 
+2026-09-27 20:28:47 | INFO    | CLEAN     | C02 normalise category case/space      restaurant_status.status rows_affected=4 'handoff'->handed_off; 'unknown' kept as unknown
+2026-09-27 20:28:47 | INFO    | CLEAN     | C04 parse timestamps (format='mixed')  all                rows_affected=0 seconds + microsecond precision mixed in sources
+2026-09-27 20:28:47 | INFO    | CLEAN     | C05 exclude rows that cannot link to an order support_tickets    rows_affected=3 counted in validation X02/X03
+2026-09-27 20:28:47 | INFO    | TRANSFORM | Built order_journey | rows=1600 unique_orders=1600 columns=55
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  O01 order_journey has exactly one row per window order | rows=1600 expected=1600
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  O02 Pipeline late flag reproduces order_outcomes.csv late_flag | compared=1495 mismatches=0
+2026-09-27 20:28:47 | INFO    | VALIDATE  | PASS  O03 KPI denominator is non-zero | measurable deliveries=1495
+2026-09-27 20:28:47 | INFO    | SAVE      | Published data/silver/run_date=2026-08-29 (2 files)
+2026-09-27 20:28:47 | INFO    | SAVE      | Published data/gold/run_date=2026-08-29 (4 files)
+2026-09-27 20:28:47 | INFO    | RUN       | KPI late_delivery_rate=56.4% (843/1495) | status=PASSED_WITH_WARNINGS | 2.6s
+2026-09-27 20:28:47 | INFO    | RUN       | ===== Pipeline finished: PUBLISHED =====
+2026-09-27 20:28:48 | INFO    | RUN       | ===== Pipeline start | run_date=2026-08-29 window=2026-08-01..2026-08-29 simulate=none =====
+2026-09-27 20:28:48 | INFO    | EXTRACT   | Mock Dispatch API healthy | url=http://127.0.0.1:56113 records=1600
+2026-09-27 20:28:48 | INFO    | EXTRACT   | SQL orders       rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | SQL order_keys   rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | SQL customers    rows=900 COUNT(*)=900 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | SQL drivers      rows=120 COUNT(*)=120 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | SQL restaurants  rows=60 COUNT(*)=60 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | CSV interventions rows=430 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | CSV support_tickets rows=202 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | CSV restaurant_status rows=502 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | CSV app_actions  rows=2365 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | CSV order_events rows=4955 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | CSV order_outcomes rows=1600 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | JSON driver_events drivers=120 events=10035 complete=True
+2026-09-27 20:28:48 | INFO    | EXTRACT   | Dispatch API page=1 rows=200 cumulative=200/1600
+2026-09-27 20:28:48 | INFO    | EXTRACT   | Dispatch API page=2 rows=200 cumulative=400/1600
+2026-09-27 20:28:48 | WARNING | EXTRACT   | Dispatch API retryable failure | page=3 status=500 attempt=1/4 wait=1s
+2026-09-27 20:28:49 | INFO    | EXTRACT   | Dispatch API page=3 rows=200 cumulative=600/1600
+2026-09-27 20:28:49 | INFO    | EXTRACT   | Dispatch API page=4 rows=200 cumulative=800/1600
+2026-09-27 20:28:49 | WARNING | EXTRACT   | Dispatch API retryable failure | page=5 status=429 attempt=1/4 wait=1s
+2026-09-27 20:28:50 | INFO    | EXTRACT   | Dispatch API page=5 rows=200 cumulative=1000/1600
+2026-09-27 20:28:50 | INFO    | EXTRACT   | Dispatch API page=6 rows=200 cumulative=1200/1600
+2026-09-27 20:28:50 | INFO    | EXTRACT   | Dispatch API page=7 rows=200 cumulative=1400/1600
+2026-09-27 20:28:50 | INFO    | EXTRACT   | Dispatch API page=8 rows=200 cumulative=1600/1600
+2026-09-27 20:28:50 | INFO    | EXTRACT   | API  dispatch     pages=8 rows=1600 total_records=1600 complete=True
+2026-09-27 20:28:50 | INFO    | EXTRACT   | Mock Dispatch API stopped
+2026-09-27 20:28:50 | INFO    | EXTRACT   | Published data/bronze/run_date=2026-08-29 (21 files)
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S01 orders has all required columns | affected=0 9 required columns present
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S01 dispatch has all required columns | affected=0 7 required columns present
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S01 interventions has all required columns | affected=0 4 required columns present
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S01 support_tickets has all required columns | affected=0 4 required columns present
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S01 driver_events has all required columns | affected=0 4 required columns present
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S02 KPI window contains orders | affected=0 window orders=1603; latest order in DB=2026-08-28 23:33:00
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S03 Freshness: newest order <= 2 days before run_date | affected=0 newest order=2026-08-28 23:33:00; age_days=1
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  S04 order_id is unique (grain = one row per order) | affected=3 duplicate extra rows=3; columns that disagree between copies=['traffic_bucket']
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S05 final_status in ['cancelled', 'delivered'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:28:50 | INFO    | VALIDATE  | INFO  S06 final_status uses canonical spelling | affected=5 variants={'Delivered': 5}
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S05 traffic_bucket in ['high', 'low', 'medium', 'severe'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:28:50 | INFO    | VALIDATE  | INFO  S06 traffic_bucket uses canonical spelling | affected=3 variants={'HIGH': 3}
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S05 weather_bucket in ['clear', 'heavy_rain', 'rain'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S06 weather_bucket uses canonical spelling | affected=0 variants={}
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  S07 distance_km_estimate within [0.1, 50] km | affected=0 min=0.5 max=45.0
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  S08 orders.driver_id is populated | affected=3 null driver_id=3
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  S08 orders.restaurant_id is populated | affected=3 null restaurant_id=3
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  L01 created_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  L01 promised_eta parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  L01 pickup_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  L02 Delivered orders have actual_delivery_at | affected=37 37 of 1535 delivered (2.4%); limit 5%
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  L03 Delivery happens after pickup | affected=5 
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  L04 Promised ETA is after order creation | affected=4 
+2026-09-27 20:28:50 | INFO    | VALIDATE  | INFO  L05 Cancelled orders have no pickup timestamp | affected=68 pickup_at is populated for cancelled orders, so it is not evidence of a pickup
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  L06 Pickup happens after dispatch assignment | affected=14 order platform pickup_at vs dispatch assigned_at
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X01 orders.restaurant_id exists in restaurants table | affected=0 coverage=100.0%
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X01 orders.driver_id exists in drivers table | affected=0 coverage=100.0%
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X01 orders.customer_id exists in customers table | affected=0 coverage=100.0%
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X02 interventions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X02 support_tickets.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  X03 support_tickets.order_id is populated | affected=3 rows without order_id=3
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X02 restaurant_status.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X02 app_actions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X02 driver_events.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X02 order_outcomes.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X02 dispatch.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  X04 support_tickets has no duplicate ticket_id | affected=1 
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  X04 restaurant_status has no duplicate rows | affected=2 
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X04 interventions has no duplicate intervention_id | affected=0 
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X05 Dispatch and order DB agree on cancellation | affected=0 
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  X06 Driver app and order DB agree on delivery time (where both exist) | affected=0 compared=1498
+2026-09-27 20:28:50 | INFO    | VALIDATE  | INFO  X07 Unmeasurable deliveries have no alternative evidence | affected=37 driver app has a delivered event for these orders
+2026-09-27 20:28:50 | WARNING | VALIDATE  | WARN  X08 Driver app and order DB pickup times agree within 60s | affected=5 max diff=3678s
+2026-09-27 20:28:50 | INFO    | VALIDATE  | INFO  X09 Intervention log and order-event stream describe the same interventions | affected=540 order_interventions.csv orders=430; order_events intervention orders=260; overlap=75
+2026-09-27 20:28:50 | INFO    | CLEAN     | C01 dedupe to one row per order        orders             rows_affected=3 keep first occurrence
+2026-09-27 20:28:50 | INFO    | CLEAN     | C02 normalise category case/space      orders.final_status rows_affected=5 
+2026-09-27 20:28:50 | INFO    | CLEAN     | C02 normalise category case/space      orders.traffic_bucket rows_affected=3 
+2026-09-27 20:28:50 | INFO    | CLEAN     | C02 normalise category case/space      orders.weather_bucket rows_affected=0 
+2026-09-27 20:28:50 | INFO    | CLEAN     | C03 drop exact duplicate rows          support_tickets    rows_affected=1 
+2026-09-27 20:28:50 | INFO    | CLEAN     | C02 normalise category case/space      support_tickets.category rows_affected=3 'Late Delivery'->late_delivery, 'ETA issue'->eta_changed
+2026-09-27 20:28:50 | INFO    | CLEAN     | C03 drop exact duplicate rows          restaurant_status  rows_affected=2 
+2026-09-27 20:28:50 | INFO    | CLEAN     | C02 normalise category case/space      restaurant_status.status rows_affected=4 'handoff'->handed_off; 'unknown' kept as unknown
+2026-09-27 20:28:50 | INFO    | CLEAN     | C04 parse timestamps (format='mixed')  all                rows_affected=0 seconds + microsecond precision mixed in sources
+2026-09-27 20:28:50 | INFO    | CLEAN     | C05 exclude rows that cannot link to an order support_tickets    rows_affected=3 counted in validation X02/X03
+2026-09-27 20:28:50 | INFO    | TRANSFORM | Built order_journey | rows=1600 unique_orders=1600 columns=55
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  O01 order_journey has exactly one row per window order | rows=1600 expected=1600
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  O02 Pipeline late flag reproduces order_outcomes.csv late_flag | compared=1495 mismatches=0
+2026-09-27 20:28:50 | INFO    | VALIDATE  | PASS  O03 KPI denominator is non-zero | measurable deliveries=1495
+2026-09-27 20:28:50 | INFO    | SAVE      | Published data/silver/run_date=2026-08-29 (2 files)
+2026-09-27 20:28:50 | INFO    | SAVE      | Published data/gold/run_date=2026-08-29 (4 files)
+2026-09-27 20:28:50 | INFO    | RUN       | KPI late_delivery_rate=56.4% (843/1495) | status=PASSED_WITH_WARNINGS | 2.6s
+2026-09-27 20:28:50 | INFO    | RUN       | ===== Pipeline finished: PUBLISHED =====
+2026-09-27 20:28:51 | INFO    | RUN       | ===== Pipeline start | run_date=2026-08-29 window=2026-08-01..2026-08-29 simulate=missing_column =====
+2026-09-27 20:28:51 | INFO    | EXTRACT   | Mock Dispatch API healthy | url=http://127.0.0.1:56127 records=1600
+2026-09-27 20:28:51 | INFO    | EXTRACT   | SQL orders       rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | SQL order_keys   rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | SQL customers    rows=900 COUNT(*)=900 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | SQL drivers      rows=120 COUNT(*)=120 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | SQL restaurants  rows=60 COUNT(*)=60 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | CSV interventions rows=430 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | CSV support_tickets rows=202 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | CSV restaurant_status rows=502 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | CSV app_actions  rows=2365 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | CSV order_events rows=4955 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | CSV order_outcomes rows=1600 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | JSON driver_events drivers=120 events=10035 complete=True
+2026-09-27 20:28:51 | INFO    | EXTRACT   | Dispatch API page=1 rows=200 cumulative=200/1600
+2026-09-27 20:28:51 | INFO    | EXTRACT   | Dispatch API page=2 rows=200 cumulative=400/1600
+2026-09-27 20:28:51 | WARNING | EXTRACT   | Dispatch API retryable failure | page=3 status=500 attempt=1/4 wait=1s
+2026-09-27 20:28:52 | INFO    | EXTRACT   | Dispatch API page=3 rows=200 cumulative=600/1600
+2026-09-27 20:28:52 | INFO    | EXTRACT   | Dispatch API page=4 rows=200 cumulative=800/1600
+2026-09-27 20:28:52 | WARNING | EXTRACT   | Dispatch API retryable failure | page=5 status=429 attempt=1/4 wait=1s
+2026-09-27 20:28:53 | INFO    | EXTRACT   | Dispatch API page=5 rows=200 cumulative=1000/1600
+2026-09-27 20:28:53 | INFO    | EXTRACT   | Dispatch API page=6 rows=200 cumulative=1200/1600
+2026-09-27 20:28:53 | INFO    | EXTRACT   | Dispatch API page=7 rows=200 cumulative=1400/1600
+2026-09-27 20:28:53 | INFO    | EXTRACT   | Dispatch API page=8 rows=200 cumulative=1600/1600
+2026-09-27 20:28:53 | INFO    | EXTRACT   | API  dispatch     pages=8 rows=1600 total_records=1600 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | Mock Dispatch API stopped
+2026-09-27 20:28:53 | INFO    | EXTRACT   | Published data/bronze/run_date=2026-08-29 (21 files)
+2026-09-27 20:28:53 | WARNING | EXTRACT   | SIMULATION: upstream order DB dropped column promised_eta
+2026-09-27 20:28:53 | ERROR   | VALIDATE  | ERROR S01 orders has all required columns | affected=1 missing=['promised_eta']
+2026-09-27 20:28:53 | INFO    | VALIDATE  | PASS  S01 dispatch has all required columns | affected=0 7 required columns present
+2026-09-27 20:28:53 | INFO    | VALIDATE  | PASS  S01 interventions has all required columns | affected=0 4 required columns present
+2026-09-27 20:28:53 | INFO    | VALIDATE  | PASS  S01 support_tickets has all required columns | affected=0 4 required columns present
+2026-09-27 20:28:53 | INFO    | VALIDATE  | PASS  S01 driver_events has all required columns | affected=0 4 required columns present
+2026-09-27 20:28:53 | INFO    | VALIDATE  | PASS  S02 KPI window contains orders | affected=0 window orders=1603; latest order in DB=2026-08-28 23:33:00
+2026-09-27 20:28:53 | INFO    | VALIDATE  | PASS  S03 Freshness: newest order <= 2 days before run_date | affected=0 newest order=2026-08-28 23:33:00; age_days=1
+2026-09-27 20:28:53 | INFO    | VALIDATE  | Published data/failed/run_date=2026-08-29 (1 files)
+2026-09-27 20:28:53 | ERROR   | VALIDATE  | BLOCKING S01 orders has all required columns | missing=['promised_eta'] | action: Stop: downstream joins/metrics would silently break
+2026-09-27 20:28:53 | ERROR   | RUN       | ===== Pipeline STOPPED by validation gate: nothing published to silver/gold (last good output left untouched) =====
+2026-09-27 20:28:53 | INFO    | RUN       | ===== Pipeline start | run_date=2026-08-29 window=2026-08-01..2026-08-29 simulate=api_down =====
+2026-09-27 20:28:53 | INFO    | EXTRACT   | SQL orders       rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | SQL order_keys   rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | SQL customers    rows=900 COUNT(*)=900 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | SQL drivers      rows=120 COUNT(*)=120 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | SQL restaurants  rows=60 COUNT(*)=60 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | CSV interventions rows=430 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | CSV support_tickets rows=202 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | CSV restaurant_status rows=502 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | CSV app_actions  rows=2365 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | CSV order_events rows=4955 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | CSV order_outcomes rows=1600 complete=True
+2026-09-27 20:28:53 | INFO    | EXTRACT   | JSON driver_events drivers=120 events=10035 complete=True
+2026-09-27 20:28:53 | WARNING | EXTRACT   | Dispatch API network error | page=1 attempt=1/4 wait=1s error=ConnectionError
+2026-09-27 20:28:54 | WARNING | EXTRACT   | Dispatch API network error | page=1 attempt=2/4 wait=2s error=ConnectionError
+2026-09-27 20:28:56 | WARNING | EXTRACT   | Dispatch API network error | page=1 attempt=3/4 wait=4s error=ConnectionError
+2026-09-27 20:29:00 | WARNING | EXTRACT   | Dispatch API network error | page=1 attempt=4/4 wait=8s error=ConnectionError
+2026-09-27 20:29:00 | WARNING | EXTRACT   | Dispatch API UNAVAILABLE — degrading: dispatch columns will be null | page 1: network error after 4 attempts
+2026-09-27 20:29:00 | INFO    | EXTRACT   | Published data/bronze/run_date=2026-08-29 (13 files)
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S01 orders has all required columns | affected=0 9 required columns present
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  S01 Dispatch API reachable | affected=1 Dispatch API unavailable for this run
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S01 interventions has all required columns | affected=0 4 required columns present
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S01 support_tickets has all required columns | affected=0 4 required columns present
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S01 driver_events has all required columns | affected=0 4 required columns present
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S02 KPI window contains orders | affected=0 window orders=1603; latest order in DB=2026-08-28 23:33:00
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S03 Freshness: newest order <= 2 days before run_date | affected=0 newest order=2026-08-28 23:33:00; age_days=1
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  S04 order_id is unique (grain = one row per order) | affected=3 duplicate extra rows=3; columns that disagree between copies=['traffic_bucket']
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S05 final_status in ['cancelled', 'delivered'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:29:00 | INFO    | VALIDATE  | INFO  S06 final_status uses canonical spelling | affected=5 variants={'Delivered': 5}
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S05 traffic_bucket in ['high', 'low', 'medium', 'severe'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:29:00 | INFO    | VALIDATE  | INFO  S06 traffic_bucket uses canonical spelling | affected=3 variants={'HIGH': 3}
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S05 weather_bucket in ['clear', 'heavy_rain', 'rain'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S06 weather_bucket uses canonical spelling | affected=0 variants={}
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  S07 distance_km_estimate within [0.1, 50] km | affected=0 min=0.5 max=45.0
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  S08 orders.driver_id is populated | affected=3 null driver_id=3
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  S08 orders.restaurant_id is populated | affected=3 null restaurant_id=3
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  L01 created_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  L01 promised_eta parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  L01 pickup_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  L02 Delivered orders have actual_delivery_at | affected=37 37 of 1535 delivered (2.4%); limit 5%
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  L03 Delivery happens after pickup | affected=5 
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  L04 Promised ETA is after order creation | affected=4 
+2026-09-27 20:29:00 | INFO    | VALIDATE  | INFO  L05 Cancelled orders have no pickup timestamp | affected=68 pickup_at is populated for cancelled orders, so it is not evidence of a pickup
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X01 orders.restaurant_id exists in restaurants table | affected=0 coverage=100.0%
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X01 orders.driver_id exists in drivers table | affected=0 coverage=100.0%
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X01 orders.customer_id exists in customers table | affected=0 coverage=100.0%
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X02 interventions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X02 support_tickets.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  X03 support_tickets.order_id is populated | affected=3 rows without order_id=3
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X02 restaurant_status.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X02 app_actions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X02 driver_events.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X02 order_outcomes.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  X04 support_tickets has no duplicate ticket_id | affected=1 
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  X04 restaurant_status has no duplicate rows | affected=2 
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X04 interventions has no duplicate intervention_id | affected=0 
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  X06 Driver app and order DB agree on delivery time (where both exist) | affected=0 compared=1498
+2026-09-27 20:29:00 | INFO    | VALIDATE  | INFO  X07 Unmeasurable deliveries have no alternative evidence | affected=37 driver app has a delivered event for these orders
+2026-09-27 20:29:00 | WARNING | VALIDATE  | WARN  X08 Driver app and order DB pickup times agree within 60s | affected=5 max diff=3678s
+2026-09-27 20:29:00 | INFO    | VALIDATE  | INFO  X09 Intervention log and order-event stream describe the same interventions | affected=540 order_interventions.csv orders=430; order_events intervention orders=260; overlap=75
+2026-09-27 20:29:00 | INFO    | CLEAN     | C01 dedupe to one row per order        orders             rows_affected=3 keep first occurrence
+2026-09-27 20:29:00 | INFO    | CLEAN     | C02 normalise category case/space      orders.final_status rows_affected=5 
+2026-09-27 20:29:00 | INFO    | CLEAN     | C02 normalise category case/space      orders.traffic_bucket rows_affected=3 
+2026-09-27 20:29:00 | INFO    | CLEAN     | C02 normalise category case/space      orders.weather_bucket rows_affected=0 
+2026-09-27 20:29:00 | INFO    | CLEAN     | C03 drop exact duplicate rows          support_tickets    rows_affected=1 
+2026-09-27 20:29:00 | INFO    | CLEAN     | C02 normalise category case/space      support_tickets.category rows_affected=3 'Late Delivery'->late_delivery, 'ETA issue'->eta_changed
+2026-09-27 20:29:00 | INFO    | CLEAN     | C03 drop exact duplicate rows          restaurant_status  rows_affected=2 
+2026-09-27 20:29:00 | INFO    | CLEAN     | C02 normalise category case/space      restaurant_status.status rows_affected=4 'handoff'->handed_off; 'unknown' kept as unknown
+2026-09-27 20:29:00 | INFO    | CLEAN     | C04 parse timestamps (format='mixed')  all                rows_affected=0 seconds + microsecond precision mixed in sources
+2026-09-27 20:29:00 | INFO    | CLEAN     | C05 exclude rows that cannot link to an order support_tickets    rows_affected=3 counted in validation X02/X03
+2026-09-27 20:29:00 | INFO    | TRANSFORM | Built order_journey | rows=1600 unique_orders=1600 columns=55
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  O01 order_journey has exactly one row per window order | rows=1600 expected=1600
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  O02 Pipeline late flag reproduces order_outcomes.csv late_flag | compared=1495 mismatches=0
+2026-09-27 20:29:00 | INFO    | VALIDATE  | PASS  O03 KPI denominator is non-zero | measurable deliveries=1495
+2026-09-27 20:29:01 | INFO    | SAVE      | Published data/silver/run_date=2026-08-29 (2 files)
+2026-09-27 20:29:01 | INFO    | SAVE      | Published data/gold/run_date=2026-08-29 (4 files)
+2026-09-27 20:29:01 | INFO    | SAVE      | Removed superseded failure report for run_date=2026-08-29
+2026-09-27 20:29:01 | INFO    | RUN       | KPI late_delivery_rate=56.4% (843/1495) | status=PASSED_WITH_WARNINGS | 7.2s
+2026-09-27 20:29:01 | WARNING | RUN       | DEGRADED run: dispatch-dependent metrics are n/a. Rerun this run_date when the Dispatch API recovers; the rerun replaces this partition.
+2026-09-27 20:29:01 | INFO    | RUN       | ===== Pipeline finished: PUBLISHED =====
+2026-09-27 20:29:01 | INFO    | RUN       | ===== Pipeline start | run_date=2026-08-29 window=2026-08-01..2026-08-29 simulate=none =====
+2026-09-27 20:29:01 | INFO    | EXTRACT   | Mock Dispatch API healthy | url=http://127.0.0.1:56146 records=1600
+2026-09-27 20:29:01 | INFO    | EXTRACT   | SQL orders       rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | SQL order_keys   rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | SQL customers    rows=900 COUNT(*)=900 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | SQL drivers      rows=120 COUNT(*)=120 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | SQL restaurants  rows=60 COUNT(*)=60 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | CSV interventions rows=430 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | CSV support_tickets rows=202 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | CSV restaurant_status rows=502 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | CSV app_actions  rows=2365 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | CSV order_events rows=4955 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | CSV order_outcomes rows=1600 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | JSON driver_events drivers=120 events=10035 complete=True
+2026-09-27 20:29:01 | INFO    | EXTRACT   | Dispatch API page=1 rows=200 cumulative=200/1600
+2026-09-27 20:29:01 | INFO    | EXTRACT   | Dispatch API page=2 rows=200 cumulative=400/1600
+2026-09-27 20:29:01 | WARNING | EXTRACT   | Dispatch API retryable failure | page=3 status=500 attempt=1/4 wait=1s
+2026-09-27 20:29:02 | INFO    | EXTRACT   | Dispatch API page=3 rows=200 cumulative=600/1600
+2026-09-27 20:29:02 | INFO    | EXTRACT   | Dispatch API page=4 rows=200 cumulative=800/1600
+2026-09-27 20:29:02 | WARNING | EXTRACT   | Dispatch API retryable failure | page=5 status=429 attempt=1/4 wait=1s
+2026-09-27 20:29:03 | INFO    | EXTRACT   | Dispatch API page=5 rows=200 cumulative=1000/1600
+2026-09-27 20:29:03 | INFO    | EXTRACT   | Dispatch API page=6 rows=200 cumulative=1200/1600
+2026-09-27 20:29:03 | INFO    | EXTRACT   | Dispatch API page=7 rows=200 cumulative=1400/1600
+2026-09-27 20:29:03 | INFO    | EXTRACT   | Dispatch API page=8 rows=200 cumulative=1600/1600
+2026-09-27 20:29:03 | INFO    | EXTRACT   | API  dispatch     pages=8 rows=1600 total_records=1600 complete=True
+2026-09-27 20:29:03 | INFO    | EXTRACT   | Mock Dispatch API stopped
+2026-09-27 20:29:03 | INFO    | EXTRACT   | Published data/bronze/run_date=2026-08-29 (21 files)
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S01 orders has all required columns | affected=0 9 required columns present
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S01 dispatch has all required columns | affected=0 7 required columns present
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S01 interventions has all required columns | affected=0 4 required columns present
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S01 support_tickets has all required columns | affected=0 4 required columns present
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S01 driver_events has all required columns | affected=0 4 required columns present
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S02 KPI window contains orders | affected=0 window orders=1603; latest order in DB=2026-08-28 23:33:00
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S03 Freshness: newest order <= 2 days before run_date | affected=0 newest order=2026-08-28 23:33:00; age_days=1
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  S04 order_id is unique (grain = one row per order) | affected=3 duplicate extra rows=3; columns that disagree between copies=['traffic_bucket']
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S05 final_status in ['cancelled', 'delivered'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:29:03 | INFO    | VALIDATE  | INFO  S06 final_status uses canonical spelling | affected=5 variants={'Delivered': 5}
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S05 traffic_bucket in ['high', 'low', 'medium', 'severe'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:29:03 | INFO    | VALIDATE  | INFO  S06 traffic_bucket uses canonical spelling | affected=3 variants={'HIGH': 3}
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S05 weather_bucket in ['clear', 'heavy_rain', 'rain'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S06 weather_bucket uses canonical spelling | affected=0 variants={}
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  S07 distance_km_estimate within [0.1, 50] km | affected=0 min=0.5 max=45.0
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  S08 orders.driver_id is populated | affected=3 null driver_id=3
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  S08 orders.restaurant_id is populated | affected=3 null restaurant_id=3
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  L01 created_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  L01 promised_eta parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  L01 pickup_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  L02 Delivered orders have actual_delivery_at | affected=37 37 of 1535 delivered (2.4%); limit 5%
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  L03 Delivery happens after pickup | affected=5 
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  L04 Promised ETA is after order creation | affected=4 
+2026-09-27 20:29:03 | INFO    | VALIDATE  | INFO  L05 Cancelled orders have no pickup timestamp | affected=68 pickup_at is populated for cancelled orders, so it is not evidence of a pickup
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  L06 Pickup happens after dispatch assignment | affected=14 order platform pickup_at vs dispatch assigned_at
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X01 orders.restaurant_id exists in restaurants table | affected=0 coverage=100.0%
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X01 orders.driver_id exists in drivers table | affected=0 coverage=100.0%
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X01 orders.customer_id exists in customers table | affected=0 coverage=100.0%
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X02 interventions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X02 support_tickets.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  X03 support_tickets.order_id is populated | affected=3 rows without order_id=3
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X02 restaurant_status.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X02 app_actions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X02 driver_events.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X02 order_outcomes.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X02 dispatch.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  X04 support_tickets has no duplicate ticket_id | affected=1 
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  X04 restaurant_status has no duplicate rows | affected=2 
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X04 interventions has no duplicate intervention_id | affected=0 
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X05 Dispatch and order DB agree on cancellation | affected=0 
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  X06 Driver app and order DB agree on delivery time (where both exist) | affected=0 compared=1498
+2026-09-27 20:29:03 | INFO    | VALIDATE  | INFO  X07 Unmeasurable deliveries have no alternative evidence | affected=37 driver app has a delivered event for these orders
+2026-09-27 20:29:03 | WARNING | VALIDATE  | WARN  X08 Driver app and order DB pickup times agree within 60s | affected=5 max diff=3678s
+2026-09-27 20:29:03 | INFO    | VALIDATE  | INFO  X09 Intervention log and order-event stream describe the same interventions | affected=540 order_interventions.csv orders=430; order_events intervention orders=260; overlap=75
+2026-09-27 20:29:03 | INFO    | CLEAN     | C01 dedupe to one row per order        orders             rows_affected=3 keep first occurrence
+2026-09-27 20:29:03 | INFO    | CLEAN     | C02 normalise category case/space      orders.final_status rows_affected=5 
+2026-09-27 20:29:03 | INFO    | CLEAN     | C02 normalise category case/space      orders.traffic_bucket rows_affected=3 
+2026-09-27 20:29:03 | INFO    | CLEAN     | C02 normalise category case/space      orders.weather_bucket rows_affected=0 
+2026-09-27 20:29:03 | INFO    | CLEAN     | C03 drop exact duplicate rows          support_tickets    rows_affected=1 
+2026-09-27 20:29:03 | INFO    | CLEAN     | C02 normalise category case/space      support_tickets.category rows_affected=3 'Late Delivery'->late_delivery, 'ETA issue'->eta_changed
+2026-09-27 20:29:03 | INFO    | CLEAN     | C03 drop exact duplicate rows          restaurant_status  rows_affected=2 
+2026-09-27 20:29:03 | INFO    | CLEAN     | C02 normalise category case/space      restaurant_status.status rows_affected=4 'handoff'->handed_off; 'unknown' kept as unknown
+2026-09-27 20:29:03 | INFO    | CLEAN     | C04 parse timestamps (format='mixed')  all                rows_affected=0 seconds + microsecond precision mixed in sources
+2026-09-27 20:29:03 | INFO    | CLEAN     | C05 exclude rows that cannot link to an order support_tickets    rows_affected=3 counted in validation X02/X03
+2026-09-27 20:29:03 | INFO    | TRANSFORM | Built order_journey | rows=1600 unique_orders=1600 columns=55
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  O01 order_journey has exactly one row per window order | rows=1600 expected=1600
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  O02 Pipeline late flag reproduces order_outcomes.csv late_flag | compared=1495 mismatches=0
+2026-09-27 20:29:03 | INFO    | VALIDATE  | PASS  O03 KPI denominator is non-zero | measurable deliveries=1495
+2026-09-27 20:29:03 | INFO    | SAVE      | Published data/silver/run_date=2026-08-29 (2 files)
+2026-09-27 20:29:03 | INFO    | SAVE      | Published data/gold/run_date=2026-08-29 (4 files)
+2026-09-27 20:29:03 | INFO    | RUN       | KPI late_delivery_rate=56.4% (843/1495) | status=PASSED_WITH_WARNINGS | 2.6s
+2026-09-27 20:29:03 | INFO    | RUN       | ===== Pipeline finished: PUBLISHED =====
+2026-09-27 20:29:06 | INFO    | RUN       | ===== Pipeline start | run_date=2026-08-29 window=2026-08-01..2026-08-29 simulate=db_down =====
+2026-09-27 20:29:07 | INFO    | EXTRACT   | Mock Dispatch API healthy | url=http://127.0.0.1:56174 records=1600
+2026-09-27 20:29:07 | INFO    | EXTRACT   | Mock Dispatch API stopped
+2026-09-27 20:29:07 | ERROR   | EXTRACT   | Extraction failed: Order DB (anchor source) not found: source_data/database/_unreachable.db
+2026-09-27 20:29:07 | ERROR   | RUN       | ===== Pipeline FAILED during extract: nothing published =====
+2026-09-27 22:07:38 | INFO    | RUN       | ===== Pipeline start | run_date=2026-08-29 window=2026-08-01..2026-08-29 simulate=none =====
+2026-09-27 22:07:39 | INFO    | EXTRACT   | Mock Dispatch API healthy | url=http://127.0.0.1:59878 records=1600
+2026-09-27 22:07:39 | INFO    | EXTRACT   | SQL orders       rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | SQL order_keys   rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | SQL customers    rows=900 COUNT(*)=900 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | SQL drivers      rows=120 COUNT(*)=120 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | SQL restaurants  rows=60 COUNT(*)=60 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | CSV interventions rows=430 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | CSV support_tickets rows=202 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | CSV restaurant_status rows=502 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | CSV app_actions  rows=2365 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | CSV order_events rows=4955 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | CSV order_outcomes rows=1600 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | JSON driver_events drivers=120 events=10035 complete=True
+2026-09-27 22:07:39 | INFO    | EXTRACT   | Dispatch API page=1 rows=200 cumulative=200/1600
+2026-09-27 22:07:39 | INFO    | EXTRACT   | Dispatch API page=2 rows=200 cumulative=400/1600
+2026-09-27 22:07:39 | WARNING | EXTRACT   | Dispatch API retryable failure | page=3 status=500 attempt=1/4 wait=1s
+2026-09-27 22:07:41 | INFO    | EXTRACT   | Dispatch API page=3 rows=200 cumulative=600/1600
+2026-09-27 22:07:41 | INFO    | EXTRACT   | Dispatch API page=4 rows=200 cumulative=800/1600
+2026-09-27 22:07:41 | WARNING | EXTRACT   | Dispatch API retryable failure | page=5 status=429 attempt=1/4 wait=1s
+2026-09-27 22:07:42 | INFO    | EXTRACT   | Dispatch API page=5 rows=200 cumulative=1000/1600
+2026-09-27 22:07:42 | INFO    | EXTRACT   | Dispatch API page=6 rows=200 cumulative=1200/1600
+2026-09-27 22:07:42 | INFO    | EXTRACT   | Dispatch API page=7 rows=200 cumulative=1400/1600
+2026-09-27 22:07:42 | INFO    | EXTRACT   | Dispatch API page=8 rows=200 cumulative=1600/1600
+2026-09-27 22:07:42 | INFO    | EXTRACT   | API  dispatch     pages=8 rows=1600 total_records=1600 complete=True
+2026-09-27 22:07:42 | INFO    | EXTRACT   | Mock Dispatch API stopped
+2026-09-27 22:07:42 | INFO    | EXTRACT   | Published data\bronze\run_date=2026-08-29 (21 files)
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S01 orders has all required columns | affected=0 9 required columns present
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S01 dispatch has all required columns | affected=0 7 required columns present
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S01 interventions has all required columns | affected=0 4 required columns present
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S01 support_tickets has all required columns | affected=0 4 required columns present
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S01 driver_events has all required columns | affected=0 4 required columns present
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S02 KPI window contains orders | affected=0 window orders=1603; latest order in DB=2026-08-28 23:33:00
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S03 Freshness: newest order <= 2 days before run_date | affected=0 newest order=2026-08-28 23:33:00; age_days=1
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  S04 order_id is unique (grain = one row per order) | affected=3 duplicate extra rows=3; columns that disagree between copies=['traffic_bucket']
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S05 final_status in ['cancelled', 'delivered'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 22:07:42 | INFO    | VALIDATE  | INFO  S06 final_status uses canonical spelling | affected=5 variants={'Delivered': 5}
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S05 traffic_bucket in ['high', 'low', 'medium', 'severe'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 22:07:42 | INFO    | VALIDATE  | INFO  S06 traffic_bucket uses canonical spelling | affected=3 variants={'HIGH': 3}
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S05 weather_bucket in ['clear', 'heavy_rain', 'rain'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S06 weather_bucket uses canonical spelling | affected=0 variants={}
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  S07 distance_km_estimate within [0.1, 50] km | affected=0 min=0.5 max=45.0
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  S08 orders.driver_id is populated | affected=3 null driver_id=3
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  S08 orders.restaurant_id is populated | affected=3 null restaurant_id=3
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  L01 created_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  L01 promised_eta parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  L01 pickup_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  L02 Delivered orders have actual_delivery_at | affected=37 37 of 1535 delivered (2.4%); limit 5%
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  L03 Delivery happens after pickup | affected=5 
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  L04 Promised ETA is after order creation | affected=4 
+2026-09-27 22:07:42 | INFO    | VALIDATE  | INFO  L05 Cancelled orders have no pickup timestamp | affected=68 pickup_at is populated for cancelled orders, so it is not evidence of a pickup
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  L06 Pickup happens after dispatch assignment | affected=14 order platform pickup_at vs dispatch assigned_at
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X01 orders.restaurant_id exists in restaurants table | affected=0 coverage=100.0%
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X01 orders.driver_id exists in drivers table | affected=0 coverage=100.0%
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X01 orders.customer_id exists in customers table | affected=0 coverage=100.0%
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X02 interventions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X02 support_tickets.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  X03 support_tickets.order_id is populated | affected=3 rows without order_id=3
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X02 restaurant_status.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X02 app_actions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X02 driver_events.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X02 order_outcomes.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X02 dispatch.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  X04 support_tickets has no duplicate ticket_id | affected=1 
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  X04 restaurant_status has no duplicate rows | affected=2 
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X04 interventions has no duplicate intervention_id | affected=0 
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X05 Dispatch and order DB agree on cancellation | affected=0 
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  X06 Driver app and order DB agree on delivery time (where both exist) | affected=0 compared=1498
+2026-09-27 22:07:42 | INFO    | VALIDATE  | INFO  X07 Unmeasurable deliveries have no alternative evidence | affected=37 driver app has a delivered event for these orders
+2026-09-27 22:07:42 | WARNING | VALIDATE  | WARN  X08 Driver app and order DB pickup times agree within 60s | affected=5 max diff=3678s
+2026-09-27 22:07:42 | INFO    | VALIDATE  | INFO  X09 Intervention log and order-event stream describe the same interventions | affected=540 order_interventions.csv orders=430; order_events intervention orders=260; overlap=75
+2026-09-27 22:07:42 | INFO    | CLEAN     | C01 dedupe to one row per order        orders             rows_affected=3 keep first occurrence
+2026-09-27 22:07:42 | INFO    | CLEAN     | C02 normalise category case/space      orders.final_status rows_affected=5 
+2026-09-27 22:07:42 | INFO    | CLEAN     | C02 normalise category case/space      orders.traffic_bucket rows_affected=3 
+2026-09-27 22:07:42 | INFO    | CLEAN     | C02 normalise category case/space      orders.weather_bucket rows_affected=0 
+2026-09-27 22:07:42 | INFO    | CLEAN     | C03 drop exact duplicate rows          support_tickets    rows_affected=1 
+2026-09-27 22:07:42 | INFO    | CLEAN     | C02 normalise category case/space      support_tickets.category rows_affected=3 'Late Delivery'->late_delivery, 'ETA issue'->eta_changed
+2026-09-27 22:07:42 | INFO    | CLEAN     | C03 drop exact duplicate rows          restaurant_status  rows_affected=2 
+2026-09-27 22:07:42 | INFO    | CLEAN     | C02 normalise category case/space      restaurant_status.status rows_affected=4 'handoff'->handed_off; 'unknown' kept as unknown
+2026-09-27 22:07:42 | INFO    | CLEAN     | C04 parse timestamps (format='mixed')  all                rows_affected=0 seconds + microsecond precision mixed in sources
+2026-09-27 22:07:42 | INFO    | CLEAN     | C05 exclude rows that cannot link to an order support_tickets    rows_affected=3 counted in validation X02/X03
+2026-09-27 22:07:42 | INFO    | TRANSFORM | Built order_journey | rows=1600 unique_orders=1600 columns=55
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  O01 order_journey has exactly one row per window order | rows=1600 expected=1600
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  O02 Pipeline late flag reproduces order_outcomes.csv late_flag | compared=1495 mismatches=0
+2026-09-27 22:07:42 | INFO    | VALIDATE  | PASS  O03 KPI denominator is non-zero | measurable deliveries=1495
+2026-09-27 22:07:43 | ERROR   | RUN       | Unexpected failure
+Traceback (most recent call last):
+  File "C:\Users\Abhiroop\Downloads\flasheats-late-delivery-pipeline\flasheats-late-delivery-pipeline\run_pipeline.py", line 123, in main
+    (gold / "evidence_table.md").write_text(evidence_table(metrics, sensitivity, report["summary"], report["checks"]))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abhiroop\anaconda3\Lib\pathlib\_local.py", line 555, in write_text
+    return PathBase.write_text(self, data, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abhiroop\anaconda3\Lib\pathlib\_abc.py", line 652, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\Abhiroop\anaconda3\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 1083: character maps to <undefined>
+2026-09-27 22:07:43 | ERROR   | RUN       | ===== Pipeline FAILED (unexpected): nothing published =====
+2026-09-27 22:10:04 | INFO    | RUN       | ===== Pipeline start | run_date=2026-08-29 window=2026-08-01..2026-08-29 simulate=none =====
+2026-09-27 22:10:05 | INFO    | EXTRACT   | Mock Dispatch API healthy | url=http://127.0.0.1:62311 records=1600
+2026-09-27 22:10:05 | INFO    | EXTRACT   | SQL orders       rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 22:10:05 | INFO    | EXTRACT   | SQL order_keys   rows=1603 COUNT(*)=1603 complete=True
+2026-09-27 22:10:05 | INFO    | EXTRACT   | SQL customers    rows=900 COUNT(*)=900 complete=True
+2026-09-27 22:10:05 | INFO    | EXTRACT   | SQL drivers      rows=120 COUNT(*)=120 complete=True
+2026-09-27 22:10:05 | INFO    | EXTRACT   | SQL restaurants  rows=60 COUNT(*)=60 complete=True
+2026-09-27 22:10:05 | INFO    | EXTRACT   | CSV interventions rows=430 complete=True
+2026-09-27 22:10:05 | INFO    | EXTRACT   | CSV support_tickets rows=202 complete=True
+2026-09-27 22:10:05 | INFO    | EXTRACT   | CSV restaurant_status rows=502 complete=True
+2026-09-27 22:10:05 | INFO    | EXTRACT   | CSV app_actions  rows=2365 complete=True
+2026-09-27 22:10:05 | INFO    | EXTRACT   | CSV order_events rows=4955 complete=True
+2026-09-27 22:10:05 | INFO    | EXTRACT   | CSV order_outcomes rows=1600 complete=True
+2026-09-27 22:10:06 | INFO    | EXTRACT   | JSON driver_events drivers=120 events=10035 complete=True
+2026-09-27 22:10:06 | INFO    | EXTRACT   | Dispatch API page=1 rows=200 cumulative=200/1600
+2026-09-27 22:10:06 | INFO    | EXTRACT   | Dispatch API page=2 rows=200 cumulative=400/1600
+2026-09-27 22:10:06 | WARNING | EXTRACT   | Dispatch API retryable failure | page=3 status=500 attempt=1/4 wait=1s
+2026-09-27 22:10:07 | INFO    | EXTRACT   | Dispatch API page=3 rows=200 cumulative=600/1600
+2026-09-27 22:10:07 | INFO    | EXTRACT   | Dispatch API page=4 rows=200 cumulative=800/1600
+2026-09-27 22:10:07 | WARNING | EXTRACT   | Dispatch API retryable failure | page=5 status=429 attempt=1/4 wait=1s
+2026-09-27 22:10:08 | INFO    | EXTRACT   | Dispatch API page=5 rows=200 cumulative=1000/1600
+2026-09-27 22:10:08 | INFO    | EXTRACT   | Dispatch API page=6 rows=200 cumulative=1200/1600
+2026-09-27 22:10:08 | INFO    | EXTRACT   | Dispatch API page=7 rows=200 cumulative=1400/1600
+2026-09-27 22:10:08 | INFO    | EXTRACT   | Dispatch API page=8 rows=200 cumulative=1600/1600
+2026-09-27 22:10:08 | INFO    | EXTRACT   | API  dispatch     pages=8 rows=1600 total_records=1600 complete=True
+2026-09-27 22:10:08 | INFO    | EXTRACT   | Mock Dispatch API stopped
+2026-09-27 22:10:08 | INFO    | EXTRACT   | Published data\bronze\run_date=2026-08-29 (21 files)
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S01 orders has all required columns | affected=0 9 required columns present
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S01 dispatch has all required columns | affected=0 7 required columns present
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S01 interventions has all required columns | affected=0 4 required columns present
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S01 support_tickets has all required columns | affected=0 4 required columns present
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S01 driver_events has all required columns | affected=0 4 required columns present
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S02 KPI window contains orders | affected=0 window orders=1603; latest order in DB=2026-08-28 23:33:00
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S03 Freshness: newest order <= 2 days before run_date | affected=0 newest order=2026-08-28 23:33:00; age_days=1
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  S04 order_id is unique (grain = one row per order) | affected=3 duplicate extra rows=3; columns that disagree between copies=['traffic_bucket']
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S05 final_status in ['cancelled', 'delivered'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 22:10:08 | INFO    | VALIDATE  | INFO  S06 final_status uses canonical spelling | affected=5 variants={'Delivered': 5}
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S05 traffic_bucket in ['high', 'low', 'medium', 'severe'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 22:10:08 | INFO    | VALIDATE  | INFO  S06 traffic_bucket uses canonical spelling | affected=3 variants={'HIGH': 3}
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S05 weather_bucket in ['clear', 'heavy_rain', 'rain'] after case/space normalisation | affected=0 unknown values=[]
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S06 weather_bucket uses canonical spelling | affected=0 variants={}
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  S07 distance_km_estimate within [0.1, 50] km | affected=0 min=0.5 max=45.0
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  S08 orders.driver_id is populated | affected=3 null driver_id=3
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  S08 orders.restaurant_id is populated | affected=3 null restaurant_id=3
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  L01 created_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  L01 promised_eta parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  L01 pickup_at parses as a timestamp | affected=0 mixed precision (seconds vs microseconds) handled with format='mixed'
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  L02 Delivered orders have actual_delivery_at | affected=37 37 of 1535 delivered (2.4%); limit 5%
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  L03 Delivery happens after pickup | affected=5 
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  L04 Promised ETA is after order creation | affected=4 
+2026-09-27 22:10:08 | INFO    | VALIDATE  | INFO  L05 Cancelled orders have no pickup timestamp | affected=68 pickup_at is populated for cancelled orders, so it is not evidence of a pickup
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  L06 Pickup happens after dispatch assignment | affected=14 order platform pickup_at vs dispatch assigned_at
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X01 orders.restaurant_id exists in restaurants table | affected=0 coverage=100.0%
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X01 orders.driver_id exists in drivers table | affected=0 coverage=100.0%
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X01 orders.customer_id exists in customers table | affected=0 coverage=100.0%
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X02 interventions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X02 support_tickets.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  X03 support_tickets.order_id is populated | affected=3 rows without order_id=3
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X02 restaurant_status.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X02 app_actions.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X02 driver_events.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X02 order_outcomes.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X02 dispatch.order_id links to an order | affected=0 coverage=100.0%
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  X04 support_tickets has no duplicate ticket_id | affected=1 
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  X04 restaurant_status has no duplicate rows | affected=2 
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X04 interventions has no duplicate intervention_id | affected=0 
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X05 Dispatch and order DB agree on cancellation | affected=0 
+2026-09-27 22:10:08 | INFO    | VALIDATE  | PASS  X06 Driver app and order DB agree on delivery time (where both exist) | affected=0 compared=1498
+2026-09-27 22:10:08 | INFO    | VALIDATE  | INFO  X07 Unmeasurable deliveries have no alternative evidence | affected=37 driver app has a delivered event for these orders
+2026-09-27 22:10:08 | WARNING | VALIDATE  | WARN  X08 Driver app and order DB pickup times agree within 60s | affected=5 max diff=3678s
+2026-09-27 22:10:08 | INFO    | VALIDATE  | INFO  X09 Intervention log and order-event stream describe the same interventions | affected=540 order_interventions.csv orders=430; order_events intervention orders=260; overlap=75
+2026-09-27 22:10:08 | INFO    | CLEAN     | C01 dedupe to one row per order        orders             rows_affected=3 keep first occurrence
+2026-09-27 22:10:08 | INFO    | CLEAN     | C02 normalise category case/space      orders.final_status rows_affected=5 
+2026-09-27 22:10:08 | INFO    | CLEAN     | C02 normalise category case/space      orders.traffic_bucket rows_affected=3 
+2026-09-27 22:10:08 | INFO    | CLEAN     | C02 normalise category case/space      orders.weather_bucket rows_affected=0 
+2026-09-27 22:10:08 | INFO    | CLEAN     | C03 drop exact duplicate rows          support_tickets    rows_affected=1 
+2026-09-27 22:10:08 | INFO    | CLEAN     | C02 normalise category case/space      support_tickets.category rows_affected=3 'Late Delivery'->late_delivery, 'ETA issue'->eta_changed
+2026-09-27 22:10:08 | INFO    | CLEAN     | C03 drop exact duplicate rows          restaurant_status  rows_affected=2 
+2026-09-27 22:10:08 | INFO    | CLEAN     | C02 normalise category case/space      restaurant_status.status rows_affected=4 'handoff'->handed_off; 'unknown' kept as unknown
+2026-09-27 22:10:08 | INFO    | CLEAN     | C04 parse timestamps (format='mixed')  all                rows_affected=0 seconds + microsecond precision mixed in sources
+2026-09-27 22:10:08 | INFO    | CLEAN     | C05 exclude rows that cannot link to an order support_tickets    rows_affected=3 counted in validation X02/X03
+2026-09-27 22:10:09 | INFO    | TRANSFORM | Built order_journey | rows=1600 unique_orders=1600 columns=55
+2026-09-27 22:10:09 | INFO    | VALIDATE  | PASS  O01 order_journey has exactly one row per window order | rows=1600 expected=1600
+2026-09-27 22:10:09 | INFO    | VALIDATE  | PASS  O02 Pipeline late flag reproduces order_outcomes.csv late_flag | compared=1495 mismatches=0
+2026-09-27 22:10:09 | INFO    | VALIDATE  | PASS  O03 KPI denominator is non-zero | measurable deliveries=1495
+2026-09-27 22:10:09 | INFO    | SAVE      | Published data\silver\run_date=2026-08-29 (2 files)
+2026-09-27 22:10:09 | INFO    | SAVE      | Published data\gold\run_date=2026-08-29 (4 files)
+2026-09-27 22:10:09 | INFO    | RUN       | KPI late_delivery_rate=56.4% (843/1495) | status=PASSED_WITH_WARNINGS | 5.0s
+2026-09-27 22:10:09 | INFO    | RUN       | ===== Pipeline finished: PUBLISHED =====

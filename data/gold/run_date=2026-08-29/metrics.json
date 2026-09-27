@@ -1,0 +1,102 @@
+{
+  "run_date": "2026-08-29",
+  "window": {
+    "created_at_from": "2026-08-01",
+    "created_at_to_exclusive": "2026-08-29",
+    "window_days": 28
+  },
+  "kpi": "Reduce late delivery rate",
+  "metrics": {
+    "M1_late_delivery_rate": {
+      "value_pct": 56.4,
+      "numerator_late_orders": 843,
+      "denominator_measurable_deliveries": 1495,
+      "definition": "fde_agreed",
+      "formula": "count(delay_min > 0) / count(delivered AND actual_delivery_at not null)",
+      "grain": "order",
+      "role": "Project KPI"
+    },
+    "M2_late_severity": {
+      "median_delay_of_late_orders_min": 8.0,
+      "p90_delay_of_late_orders_min": 22.3,
+      "late_over_10min_pct_of_deliveries": 23.3,
+      "formula": "median(delay_min | late); share of measurable deliveries with delay_min > 10",
+      "grain": "order",
+      "role": "How bad is late? (Support Lead's >10 min view)"
+    },
+    "M3_stage_delay_gap": {
+      "stages": {
+        "created_to_assigned_min": {
+          "stage": "Order created -> driver assigned (dispatch)",
+          "median_on_time_min": 2.3,
+          "median_late_min": 2.3,
+          "gap_min": 0.0,
+          "orders_with_valid_stage": 1495
+        },
+        "assigned_to_pickup_min": {
+          "stage": "Driver assigned -> food picked up (restaurant prep + driver arrival)",
+          "median_on_time_min": 16.8,
+          "median_late_min": 28.8,
+          "gap_min": 12.0,
+          "orders_with_valid_stage": 1481
+        },
+        "pickup_to_delivered_min": {
+          "stage": "Picked up -> delivered (transit)",
+          "median_on_time_min": 45.3,
+          "median_late_min": 49.0,
+          "gap_min": 3.7,
+          "orders_with_valid_stage": 1490
+        }
+      },
+      "largest_gap_stage": "assigned_to_pickup_min",
+      "formula": "median(stage minutes | late) - median(stage minutes | on time)",
+      "grain": "order x workflow stage",
+      "role": "Where in the workflow delay accumulates"
+    },
+    "M4_pickup_wait_breach": {
+      "threshold_min": 25,
+      "breach_rate_pct": 41.2,
+      "late_rate_when_breached_pct": 94.4,
+      "late_rate_when_not_breached_pct": 30.7,
+      "orders_evaluated": 1481,
+      "formula": "share of deliveries with assigned_to_pickup_min > 25; late rate split by breach",
+      "grain": "order",
+      "role": "Leading indicator Ops can act on before the ETA is missed"
+    },
+    "M5_intervention_coverage": {
+      "late_orders_with_any_intervention_pct": 27.0,
+      "late_orders_with_preventive_intervention_pct": 24.2,
+      "interventions_after_delivery_pct": 10.5,
+      "late_rate_with_preventive_intervention_pct": 56.8,
+      "late_rate_without_intervention_pct": 56.4,
+      "formula": "share of late orders with >=1 intervention (preventive = before actual delivery)",
+      "grain": "order (interventions aggregated to order)",
+      "role": "Are interventions reaching late orders in time?",
+      "caution": "Association only: interventions are triggered by late risk, so with-vs-without is confounded"
+    }
+  },
+  "supporting": {
+    "late_rate_by_traffic_bucket_pct": {
+      "high": 66.5,
+      "low": 49.4,
+      "medium": 51.4,
+      "severe": 65.9
+    },
+    "late_rate_reassigned_vs_not_pct": {
+      "reassigned": 57.1,
+      "not_reassigned": 56.3
+    }
+  },
+  "data_trust": {
+    "orders_in_window": 1600,
+    "cancelled_orders": 68,
+    "delivered_orders": 1532,
+    "measurable_deliveries": 1495,
+    "unmeasurable_deliveries": 37,
+    "unmeasurable_recoverable_from_driver_app": 37,
+    "measurement_coverage_pct": 97.6,
+    "orders_without_transit_gps": 9,
+    "dispatch_api_available": true
+  },
+  "validation_status": "PASSED_WITH_WARNINGS"
+}

@@ -1,0 +1,136 @@
+{
+  "orders": {
+    "mode": "SQL",
+    "source": "flasheats.db:orders",
+    "rows": 1603,
+    "expected_rows": 1603,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "len(result) == SELECT COUNT(*) with same filter",
+    "sha256": null
+  },
+  "order_keys": {
+    "mode": "SQL",
+    "source": "flasheats.db:order_keys",
+    "rows": 1603,
+    "expected_rows": 1603,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "len(result) == SELECT COUNT(*) with same filter",
+    "sha256": null
+  },
+  "customers": {
+    "mode": "SQL",
+    "source": "flasheats.db:customers",
+    "rows": 900,
+    "expected_rows": 900,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "len(result) == SELECT COUNT(*) with same filter",
+    "sha256": null
+  },
+  "drivers": {
+    "mode": "SQL",
+    "source": "flasheats.db:drivers",
+    "rows": 120,
+    "expected_rows": 120,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "len(result) == SELECT COUNT(*) with same filter",
+    "sha256": null
+  },
+  "restaurants": {
+    "mode": "SQL",
+    "source": "flasheats.db:restaurants",
+    "rows": 60,
+    "expected_rows": 60,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "len(result) == SELECT COUNT(*) with same filter",
+    "sha256": null
+  },
+  "interventions": {
+    "mode": "CSV",
+    "source": "order_interventions.csv",
+    "rows": 430,
+    "expected_rows": 430,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "parsed rows == csv records in file",
+    "sha256": "40894d28b2ad4576f252358e1ebfa6941a553a8793fd517255db34f38575e1eb"
+  },
+  "support_tickets": {
+    "mode": "CSV",
+    "source": "support_tickets.csv",
+    "rows": 202,
+    "expected_rows": 202,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "parsed rows == csv records in file",
+    "sha256": "213eec7e40153152574eb723fe180e06bbae9fadd1d7daeb912b41be0179d622"
+  },
+  "restaurant_status": {
+    "mode": "CSV",
+    "source": "restaurant_status.csv",
+    "rows": 502,
+    "expected_rows": 502,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "parsed rows == csv records in file",
+    "sha256": "49a1e4e8449ad560eaaf29fb90b71ffadd8535521ca161a8dd73e819f04cdea5"
+  },
+  "app_actions": {
+    "mode": "CSV",
+    "source": "customer_app_actions.csv",
+    "rows": 2365,
+    "expected_rows": 2365,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "parsed rows == csv records in file",
+    "sha256": "bf6f2ca6ef00dfbf55c375eae03d305e2e96324d6060df9bdff382ccf4db688d"
+  },
+  "order_events": {
+    "mode": "CSV",
+    "source": "order_events.csv",
+    "rows": 4955,
+    "expected_rows": 4955,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "parsed rows == csv records in file",
+    "sha256": "cbc65cb6f25f22e840eb2a9dd2b4b412aab1b90ef1d5d589dcd53ce891371e8a"
+  },
+  "order_outcomes": {
+    "mode": "CSV",
+    "source": "order_outcomes.csv",
+    "rows": 1600,
+    "expected_rows": 1600,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "parsed rows == csv records in file",
+    "sha256": "881677d4fccd4c7d366bc3ceb866448919a1de0feaa7d88a32444e51695b167a"
+  },
+  "driver_events": {
+    "mode": "JSON",
+    "source": "driver_events.json",
+    "rows": 10035,
+    "expected_rows": 10035,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "flattened rows == sum of nested events across 120 drivers",
+    "sha256": "a6aa0c6fb653ad5b348787b78c5cb2caeb86e4a94f69efa0a4a2f9ad4b5004b0"
+  },
+  "dispatch": {
+    "mode": "API",
+    "source": "dispatch_api:/dispatch/orders",
+    "rows": 1600,
+    "expected_rows": 1600,
+    "complete": true,
+    "status": "OK",
+    "completeness_check": "sum(page rows) == total_records over 8 pages; unique order_id=1600",
+    "sha256": null
+  },
+  "_window": {
+    "created_at_from": "2026-08-01",
+    "created_at_to_exclusive": "2026-08-29"
+  }
+}

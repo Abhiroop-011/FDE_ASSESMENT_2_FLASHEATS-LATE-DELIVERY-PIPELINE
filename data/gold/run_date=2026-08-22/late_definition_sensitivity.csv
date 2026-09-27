@@ -1,0 +1,7 @@
+definition,label,threshold_min,denominator_rule,late_orders,denominator,late_rate_pct,canonical
+fde_agreed,Delivered after promised ETA (> 0 min); denominator = delivered orders with a recorded delivery time,0,measurable_delivered,633,1116,56.7,True
+vp_operations,Any delivered order after promised ETA; all delivered orders in denominator,0,all_delivered,633,1139,55.6,False
+support_lead,Only > 10 min beyond ETA counts,10,measurable_delivered,264,1116,23.7,False
+finance_naive_all_orders,Counterfactual: cancelled orders NOT excluded (what Finance warned against),0,all_orders,633,1193,53.1,False
+data_team_dashboard,Historical dashboard: delivered orders with non-null actual delivery time,0,measurable_delivered,633,1116,56.7,False
+sensitivity_driver_app_backfill,"Canonical, with missing delivery times back-filled from driver app",0,delivered_with_any_delivery_evidence,650,1139,57.1,False

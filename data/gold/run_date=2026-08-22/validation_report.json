@@ -1,0 +1,525 @@
+{
+  "run_date": "2026-08-22",
+  "status": "PASSED_WITH_WARNINGS",
+  "summary": {
+    "PASS": 31,
+    "INFO": 5,
+    "WARN": 11,
+    "ERROR": 0
+  },
+  "checks": [
+    {
+      "rule_id": "S01",
+      "category": "structural",
+      "rule": "orders has all required columns",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "9 required columns present",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S01",
+      "category": "structural",
+      "rule": "dispatch has all required columns",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "7 required columns present",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S01",
+      "category": "structural",
+      "rule": "interventions has all required columns",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "4 required columns present",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S01",
+      "category": "structural",
+      "rule": "support_tickets has all required columns",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "4 required columns present",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S01",
+      "category": "structural",
+      "rule": "driver_events has all required columns",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "4 required columns present",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S02",
+      "category": "structural",
+      "rule": "KPI window contains orders",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "window orders=1195; latest order in DB=2026-08-28 23:33:00",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S03",
+      "category": "structural",
+      "rule": "Freshness: newest order <= 2 days before run_date",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "newest order=2026-08-21 23:47:00; age_days=1",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S04",
+      "category": "structural",
+      "rule": "order_id is unique (grain = one row per order)",
+      "status": "WARN",
+      "affected": 2,
+      "detail": "duplicate extra rows=2; columns that disagree between copies=['traffic_bucket']",
+      "handling": "Keep first occurrence (agreed rule). Timestamps identical, so KPI unaffected; traffic_bucket for these orders is ambiguous",
+      "sample_ids": [
+        "O00120",
+        "O00723"
+      ]
+    },
+    {
+      "rule_id": "S05",
+      "category": "structural",
+      "rule": "final_status in ['cancelled', 'delivered'] after case/space normalisation",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "unknown values=[]",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S06",
+      "category": "structural",
+      "rule": "final_status uses canonical spelling",
+      "status": "INFO",
+      "affected": 3,
+      "detail": "variants={'Delivered': 3}",
+      "handling": "Normalised to lower-case in clean step",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S05",
+      "category": "structural",
+      "rule": "traffic_bucket in ['high', 'low', 'medium', 'severe'] after case/space normalisation",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "unknown values=[]",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S06",
+      "category": "structural",
+      "rule": "traffic_bucket uses canonical spelling",
+      "status": "INFO",
+      "affected": 1,
+      "detail": "variants={'HIGH': 1}",
+      "handling": "Normalised to lower-case in clean step",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S05",
+      "category": "structural",
+      "rule": "weather_bucket in ['clear', 'heavy_rain', 'rain'] after case/space normalisation",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "unknown values=[]",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S06",
+      "category": "structural",
+      "rule": "weather_bucket uses canonical spelling",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "variants={}",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S07",
+      "category": "structural",
+      "rule": "distance_km_estimate within [0.1, 50] km",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "min=0.5 max=45.0",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "S08",
+      "category": "structural",
+      "rule": "orders.driver_id is populated",
+      "status": "WARN",
+      "affected": 3,
+      "detail": "null driver_id=3",
+      "handling": "Kept in KPI; excluded from per-driver/restaurant breakdowns",
+      "sample_ids": [
+        "O00404",
+        "O00405",
+        "O00406"
+      ]
+    },
+    {
+      "rule_id": "S08",
+      "category": "structural",
+      "rule": "orders.restaurant_id is populated",
+      "status": "WARN",
+      "affected": 2,
+      "detail": "null restaurant_id=2",
+      "handling": "Kept in KPI; excluded from per-driver/restaurant breakdowns",
+      "sample_ids": [
+        "O00402",
+        "O00403"
+      ]
+    },
+    {
+      "rule_id": "L01",
+      "category": "lifecycle",
+      "rule": "created_at parses as a timestamp",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "mixed precision (seconds vs microseconds) handled with format='mixed'",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "L01",
+      "category": "lifecycle",
+      "rule": "promised_eta parses as a timestamp",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "mixed precision (seconds vs microseconds) handled with format='mixed'",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "L01",
+      "category": "lifecycle",
+      "rule": "pickup_at parses as a timestamp",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "mixed precision (seconds vs microseconds) handled with format='mixed'",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "L02",
+      "category": "lifecycle",
+      "rule": "Delivered orders have actual_delivery_at",
+      "status": "WARN",
+      "affected": 23,
+      "detail": "23 of 1141 delivered (2.0%); limit 5%",
+      "handling": "Excluded from KPI denominator and reported as 'unmeasurable'; NOT back-filled (driver-app recovery shown as sensitivity)",
+      "sample_ids": [
+        "O00043",
+        "O00095",
+        "O00127",
+        "O00417",
+        "O00488",
+        "O00548",
+        "O00587",
+        "O00610",
+        "O00672",
+        "O00716"
+      ]
+    },
+    {
+      "rule_id": "L03",
+      "category": "lifecycle",
+      "rule": "Delivery happens after pickup",
+      "status": "WARN",
+      "affected": 3,
+      "detail": "",
+      "handling": "Kept in KPI (delay uses promised vs delivered only); excluded from pickup->delivered stage metric",
+      "sample_ids": [
+        "O00051",
+        "O00053",
+        "O00055"
+      ]
+    },
+    {
+      "rule_id": "L04",
+      "category": "lifecycle",
+      "rule": "Promised ETA is after order creation",
+      "status": "WARN",
+      "affected": 2,
+      "detail": "",
+      "handling": "Kept in KPI (max impact 0.3 pp) and listed as assumption; needs order-platform owner to confirm",
+      "sample_ids": [
+        "O00102",
+        "O00104"
+      ]
+    },
+    {
+      "rule_id": "L05",
+      "category": "lifecycle",
+      "rule": "Cancelled orders have no pickup timestamp",
+      "status": "INFO",
+      "affected": 54,
+      "detail": "pickup_at is populated for cancelled orders, so it is not evidence of a pickup",
+      "handling": "Cancelled orders excluded from all stage metrics",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "L06",
+      "category": "lifecycle",
+      "rule": "Pickup happens after dispatch assignment",
+      "status": "WARN",
+      "affected": 10,
+      "detail": "order platform pickup_at vs dispatch assigned_at",
+      "handling": "Excluded from assigned->pickup stage metric",
+      "sample_ids": [
+        "O00026",
+        "O00142",
+        "O00380",
+        "O00406",
+        "O00427",
+        "O00496",
+        "O00639",
+        "O00647",
+        "O00908",
+        "O01093"
+      ]
+    },
+    {
+      "rule_id": "X01",
+      "category": "cross-source",
+      "rule": "orders.restaurant_id exists in restaurants table",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "coverage=100.0%",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X01",
+      "category": "cross-source",
+      "rule": "orders.driver_id exists in drivers table",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "coverage=100.0%",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X01",
+      "category": "cross-source",
+      "rule": "orders.customer_id exists in customers table",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "coverage=100.0%",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X02",
+      "category": "cross-source",
+      "rule": "interventions.order_id links to an order",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "coverage=100.0%",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X02",
+      "category": "cross-source",
+      "rule": "support_tickets.order_id links to an order",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "coverage=100.0%",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X03",
+      "category": "cross-source",
+      "rule": "support_tickets.order_id is populated",
+      "status": "WARN",
+      "affected": 3,
+      "detail": "rows without order_id=3",
+      "handling": "Cannot be linked to an order; excluded from journey",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X02",
+      "category": "cross-source",
+      "rule": "restaurant_status.order_id links to an order",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "coverage=100.0%",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X02",
+      "category": "cross-source",
+      "rule": "app_actions.order_id links to an order",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "coverage=100.0%",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X02",
+      "category": "cross-source",
+      "rule": "driver_events.order_id links to an order",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "coverage=100.0%",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X02",
+      "category": "cross-source",
+      "rule": "order_outcomes.order_id links to an order",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "coverage=100.0%",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X02",
+      "category": "cross-source",
+      "rule": "dispatch.order_id links to an order",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "coverage=100.0%",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X04",
+      "category": "cross-source",
+      "rule": "support_tickets has no duplicate ticket_id",
+      "status": "WARN",
+      "affected": 1,
+      "detail": "",
+      "handling": "Exact duplicates removed in clean step",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X04",
+      "category": "cross-source",
+      "rule": "restaurant_status has no duplicate rows",
+      "status": "WARN",
+      "affected": 2,
+      "detail": "",
+      "handling": "Exact duplicates removed in clean step",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X04",
+      "category": "cross-source",
+      "rule": "interventions has no duplicate intervention_id",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X05",
+      "category": "cross-source",
+      "rule": "Dispatch and order DB agree on cancellation",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X06",
+      "category": "cross-source",
+      "rule": "Driver app and order DB agree on delivery time (where both exist)",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "compared=1118",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X07",
+      "category": "cross-source",
+      "rule": "Unmeasurable deliveries have no alternative evidence",
+      "status": "INFO",
+      "affected": 23,
+      "detail": "driver app has a delivered event for these orders",
+      "handling": "Not back-filled into KPI; reported as 'recovered' sensitivity so the client can decide",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "X08",
+      "category": "cross-source",
+      "rule": "Driver app and order DB pickup times agree within 60s",
+      "status": "WARN",
+      "affected": 3,
+      "detail": "max diff=3537s",
+      "handling": "Order DB pickup_at used; disagreement recorded as instrumentation issue",
+      "sample_ids": [
+        "O00051",
+        "O00053",
+        "O00055"
+      ]
+    },
+    {
+      "rule_id": "X09",
+      "category": "cross-source",
+      "rule": "Intervention log and order-event stream describe the same interventions",
+      "status": "INFO",
+      "affected": 540,
+      "detail": "order_interventions.csv orders=430; order_events intervention orders=260; overlap=75",
+      "handling": "order_interventions.csv used as system of record (has initiator + reason); discrepancy raised with Ops",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "O01",
+      "category": "output",
+      "rule": "order_journey has exactly one row per window order",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "rows=1193 expected=1193",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "O02",
+      "category": "output",
+      "rule": "Pipeline late flag reproduces order_outcomes.csv late_flag",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "compared=1116 mismatches=0",
+      "handling": "",
+      "sample_ids": []
+    },
+    {
+      "rule_id": "O03",
+      "category": "output",
+      "rule": "KPI denominator is non-zero",
+      "status": "PASS",
+      "affected": 0,
+      "detail": "measurable deliveries=1116",
+      "handling": "",
+      "sample_ids": []
+    }
+  ]
+}
